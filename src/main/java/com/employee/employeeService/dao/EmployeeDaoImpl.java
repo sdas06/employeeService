@@ -1,5 +1,6 @@
 package com.employee.employeeService.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +43,23 @@ public class EmployeeDaoImpl implements EmployeeDao {
 			Employee emp = (Employee) empRepository.findByEmpId(id);
 			if (null != emp){
 				System.out.println("the emp name for the id-->"+emp.getEmpName());
-				employeeEntity.setEmpId(emp.getEmpId());
-				empRepository.save(employeeEntity);
-				status = "Employee Updated successfully";
+				Date dateOne = emp.getJoiningDate();
+				Date dateTwo = employeeEntity.getJoiningDate();
 				
+				
+				long dateDifference = dateTwo.getTime() - dateOne.getTime();
+				System.out.println("The date difference in milliseconds-->"+dateDifference);
+				if (dateDifference > (24*60*60*1000)){
+					System.out.println("More than 24 hours");
+					employeeEntity.setEmpId(emp.getEmpId());
+					empRepository.save(employeeEntity);
+					status = "Employee Updated successfully";
+				}
+				else{
+					System.out.println("Less than 24 hours");
+					status = "Employee Updation is restricted";
+				}
+					
 				System.out.println("In DaoImpl*******************************");
 				List<Employee> empList =empRepository.findAll();
 				for (Employee empEnt : empList){

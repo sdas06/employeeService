@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -41,6 +43,8 @@ public class EmployeeController {
 	
 	@PostMapping(value="employees" ,consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Map<String, Object>> createNewEmployee(@RequestBody EmployeePayload employeePayload) {
+		final Logger slf4jLogger = LoggerFactory.getLogger(EmployeeController.class);
+		slf4jLogger.info("This is Logger in EmployeeController");
 		System.out.println("emp name :::"+ employeePayload.getName());
 		long startTime = System.currentTimeMillis();
 		boolean isValidated = validate(employeePayload);
@@ -59,12 +63,12 @@ public class EmployeeController {
 	public ResponseEntity<Map<String, Object>> updateEmployeeById(@RequestBody EmployeePayload employeePayload,@PathVariable Long id) {
 		long startTime = System.currentTimeMillis();
 		
-		employeeService.updateEmployeeById(employeePayload,id);
+		String status = employeeService.updateEmployeeById(employeePayload,id);
 		HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json; charset=UTF-8");
 	    headers.add("TIme-Taken", String.valueOf(System.currentTimeMillis() - startTime) + " ms");
 	    Map<String, Object> json = new HashMap<String, Object>();
-	    json.put("status", "Employee Successfully Updated");
+	    json.put("status", status);
 	    return (new ResponseEntity<>(json, headers, HttpStatus.OK)) ;
 		
 	}
