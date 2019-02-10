@@ -1,8 +1,9 @@
 package com.employee.employeeService.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.employee.employeeService.dao.EmpRepository;
-import com.employee.employeeService.entity.Employee;
 import com.employee.employeeService.model.EmployeePayload;
 import com.employee.employeeService.service.EmployeeService;
 
@@ -28,10 +27,9 @@ import com.employee.employeeService.service.EmployeeService;
 public class EmployeeController {
 	
 	@Autowired
-	private EmpRepository empRepository;
-	
-	@Autowired
 	private EmployeeService employeeService;
+	
+	final Logger slf4jLogger = LoggerFactory.getLogger(EmployeeController.class);
 
 	
 	@RequestMapping(value="hello",method=RequestMethod.GET)
@@ -42,43 +40,39 @@ public class EmployeeController {
 	}
 	
 	@PostMapping(value="employees" ,consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<String, Object>> createNewEmployee(@RequestBody EmployeePayload employeePayload) {
-		final Logger slf4jLogger = LoggerFactory.getLogger(EmployeeController.class);
-		slf4jLogger.info("This is Logger in EmployeeController");
+	public ResponseEntity<Map<String, Object>> createNewEmployee(@Valid @RequestBody EmployeePayload employeePayload) {
+		
+		slf4jLogger.info("EmployeeController-Create New Employee starting:::");
 		System.out.println("emp name :::"+ employeePayload.getName());
 		long startTime = System.currentTimeMillis();
-		boolean isValidated = validate(employeePayload);
 		
-		employeeService.createNewEmployee(employeePayload);
+		String status = employeeService.createNewEmployee(employeePayload);
 		HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json; charset=UTF-8");
 	    headers.add("TIme-Taken", String.valueOf(System.currentTimeMillis() - startTime) + " ms");
 	    Map<String, Object> json = new HashMap<String, Object>();
-	    json.put("status", "Employee Successfully created");
-	    return (new ResponseEntity<>(json, headers, HttpStatus.OK));
+	    json.put("status", status);
+	    slf4jLogger.info("EmployeeController-Create New Employee ending:::");
+	    return (new ResponseEntity<>(json, headers, HttpStatus.CREATED));
 		
 	}
 	
 	@PutMapping(value="employees/{id}" ,consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<String, Object>> updateEmployeeById(@RequestBody EmployeePayload employeePayload,@PathVariable Long id) {
-		long startTime = System.currentTimeMillis();
+	public ResponseEntity<Map<String, Object>> updateEmployeeById(@Valid @RequestBody EmployeePayload employeePayload,@PathVariable Long id) {
 		
+		slf4jLogger.info("EmployeeController-Update Employee starting:::");
+		long startTime = System.currentTimeMillis();
 		String status = employeeService.updateEmployeeById(employeePayload,id);
 		HttpHeaders headers = new HttpHeaders();
 	    headers.add("Content-Type", "application/json; charset=UTF-8");
 	    headers.add("TIme-Taken", String.valueOf(System.currentTimeMillis() - startTime) + " ms");
 	    Map<String, Object> json = new HashMap<String, Object>();
 	    json.put("status", status);
+	    slf4jLogger.info("EmployeeController-Update Employee ending:::");
 	    return (new ResponseEntity<>(json, headers, HttpStatus.OK)) ;
 		
 	}
 
-	private boolean validate(EmployeePayload employeePayload) {
-		// TODO Auto-generated method stub
-		// to validate employeed bean as per xsd
-		return false;
-	}
-	
 	 
-
+	
 }

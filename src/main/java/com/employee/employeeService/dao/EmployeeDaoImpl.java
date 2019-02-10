@@ -3,24 +3,27 @@ package com.employee.employeeService.dao;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.employee.employeeService.entity.Employee;
-import com.employee.employeeService.model.EmployeePayload;
 
-@Component
+@Repository
 public class EmployeeDaoImpl implements EmployeeDao {
 	
 	@Autowired
 	EmpRepository empRepository;
+	final Logger slf4jLogger = LoggerFactory.getLogger(EmployeeDaoImpl.class);
 
 	@Override
 	public String createNewEmployee(Employee employeeEntity) {
 		// TODO Auto-generated method stub
-		
+		slf4jLogger.info("EmployeeDaoImpl-Create New Employee starting:::");
 		try{
 			empRepository.save(employeeEntity);
+			
 			System.out.println("In DaoImpl*******************************");
 			List<Employee> empList =empRepository.findAll();
 			for (Employee empEnt : empList){
@@ -32,12 +35,14 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return "Employee Created Successfully:::";
+		slf4jLogger.info("EmployeeDaoImpl-Create New Employee ending:::");
+		return "Employee Created Successfully";
 	}
 
 	@Override
 	public String updateEmployeeById(Employee employeeEntity, Long id) {
 		// TODO Auto-generated method stub
+		slf4jLogger.info("EmployeeDaoImpl-Create update Employee starting:::");
 		String status = null;
 		try{
 			Employee emp = (Employee) empRepository.findByEmpId(id);
@@ -75,6 +80,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		slf4jLogger.info("EmployeeDaoImpl-Create update Employee ending:::");
 		return status;
 		
 	}

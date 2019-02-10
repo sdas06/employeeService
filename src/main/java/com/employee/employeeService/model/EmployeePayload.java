@@ -3,17 +3,21 @@ package com.employee.employeeService.model;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlAccessorType;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "emp")
 public class EmployeePayload {
 	
+	@NotNull(message="Name is required field")
+	@Size(min = 2, max = 30)
 	private String name;
-	//@NotNull(message="Id is required field")
 	private int id;
 	private Date joiningDate;
+	@NotNull(message="Department is required field")
+	@Pattern(regexp = "hr|fin|it|operations", flags = Pattern.Flag.CASE_INSENSITIVE)
 	private String deptName;
 	
 	public String getName() {

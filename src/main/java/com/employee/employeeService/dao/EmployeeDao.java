@@ -1,7 +1,6 @@
 package com.employee.employeeService.dao;
 
 import com.employee.employeeService.entity.Employee;
-import com.employee.employeeService.model.EmployeePayload;
 
 public interface EmployeeDao {
 	
