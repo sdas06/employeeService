@@ -1,4 +1,4 @@
-package com.employee.employeeService;
+package com.employee.employeeService.dao;
 
 import java.util.Date;
 
