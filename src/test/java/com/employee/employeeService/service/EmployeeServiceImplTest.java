@@ -11,12 +11,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.employee.employeeService.dao.EmployeeDao;
 import com.employee.employeeService.entity.Employee;
 import com.employee.employeeService.model.EmployeePayload;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EmployeeServiceImplTest {
+	
+	final Logger slf4jLogger = LoggerFactory.getLogger(EmployeeServiceImplTest.class);
 	
 	@Mock
 	EmployeeDao employeeDao;
@@ -28,44 +33,37 @@ public class EmployeeServiceImplTest {
 	
 	@Test
 	public void createNewEmployee(){
-		System.out.println("Inside testing of EmployeeServiceImplTest*******");
+		slf4jLogger.info("***EmployeeServiceImplTest -createNewEmployee starting ");
 		EmployeePayload employeePayload = new EmployeePayload();
 		employeePayload.setName("Rajesh");
 		employeePayload.setDeptName("HR");
 		employeePayload.setJoiningDate(new Date());
-		Employee empEntity = employeeServiceImpl.mapModelToDTO(employeePayload);
-		System.out.println("employeeEntity--->"+empEntity);
 		
 		when(employeeDao.createNewEmployee(Mockito.any())).thenReturn("Employee Successfully created");
-		//when(employeeServiceImpl.mapModelToDTO(employeePayload)).thenReturn(empEntity);
-		//System.out.println(employeeDao.createNewEmployee(empEntity));
 		String status = employeeServiceImpl.createNewEmployee(employeePayload);
-		System.out.println("Getting status value:::"+status);
+		slf4jLogger.info("Getting status value after mocking:::"+status);
 		assertEquals("Employee Successfully created",status);
 		
 	} 
 	
 	@Test
 	public void updateEmployeeById(){
-		System.out.println("Inside testing of EmployeeServiceImplTest - update*******");
+		slf4jLogger.info("***EmployeeServiceImplTest -updateEmployeeById starting ");
 		EmployeePayload employeePayload = new EmployeePayload();
 		employeePayload.setName("Rajesh");
 		employeePayload.setDeptName("HR");
 		employeePayload.setJoiningDate(new Date());
-		Employee empEntity = employeeServiceImpl.mapModelToDTO(employeePayload);
-		System.out.println("employeeEntity--->"+empEntity);
 		
 		when(employeeDao.updateEmployeeById(Mockito.any(),Mockito.any())).thenReturn("Employee Successfully updated");
-		//when(employeeServiceImpl.mapModelToDTO(employeePayload)).thenReturn(empEntity);
-		//System.out.println(employeeDao.createNewEmployee(empEntity));
 		String status = employeeServiceImpl.updateEmployeeById(employeePayload,3l);
-		System.out.println("Getting status value for update:::"+status);
+		slf4jLogger.info("Getting status value after mocking:::"+status);
 		assertEquals("Employee Successfully updated",status);
 		
 	}
 	
 	@Test
 	public void mapModelToDTO() {
+		slf4jLogger.info("***EmployeeServiceImplTest -mapModelToDTO starting ");
 		EmployeePayload employeePayload = new EmployeePayload();
 		employeePayload.setName("Rajesh");
 		employeePayload.setDeptName("HR");

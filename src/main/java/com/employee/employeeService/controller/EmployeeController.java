@@ -23,56 +23,71 @@ import org.springframework.web.bind.annotation.RestController;
 import com.employee.employeeService.model.EmployeePayload;
 import com.employee.employeeService.service.EmployeeService;
 
+/**
+ * 
+ * @author sidharth
+ *
+ */
 @RestController
 public class EmployeeController {
-	
+
 	@Autowired
 	private EmployeeService employeeService;
-	
+
 	final Logger slf4jLogger = LoggerFactory.getLogger(EmployeeController.class);
 
-	
-	@RequestMapping(value="hello",method=RequestMethod.GET)
+	/**
+	 * @return
+	 */
+	@RequestMapping(value = "hello", method = RequestMethod.GET)
 	public String hello() {
-		
-		return "Say Helloworld to Employees....";
-		
-	}
-	
-	@PostMapping(value="employees" ,consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<String, Object>> createNewEmployee(@Valid @RequestBody EmployeePayload employeePayload) {
-		
-		slf4jLogger.info("EmployeeController-Create New Employee starting:::");
-		System.out.println("emp name :::"+ employeePayload.getName());
-		long startTime = System.currentTimeMillis();
-		
-		String status = employeeService.createNewEmployee(employeePayload);
-		HttpHeaders headers = new HttpHeaders();
-	    headers.add("Content-Type", "application/json; charset=UTF-8");
-	    headers.add("TIme-Taken", String.valueOf(System.currentTimeMillis() - startTime) + " ms");
-	    Map<String, Object> json = new HashMap<String, Object>();
-	    json.put("status", status);
-	    slf4jLogger.info("EmployeeController-Create New Employee ending:::");
-	    return (new ResponseEntity<>(json, headers, HttpStatus.CREATED));
-		
-	}
-	
-	@PutMapping(value="employees/{id}" ,consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Map<String, Object>> updateEmployeeById(@Valid @RequestBody EmployeePayload employeePayload,@PathVariable Long id) {
-		
-		slf4jLogger.info("EmployeeController-Update Employee starting:::");
-		long startTime = System.currentTimeMillis();
-		String status = employeeService.updateEmployeeById(employeePayload,id);
-		HttpHeaders headers = new HttpHeaders();
-	    headers.add("Content-Type", "application/json; charset=UTF-8");
-	    headers.add("TIme-Taken", String.valueOf(System.currentTimeMillis() - startTime) + " ms");
-	    Map<String, Object> json = new HashMap<String, Object>();
-	    json.put("status", status);
-	    slf4jLogger.info("EmployeeController-Update Employee ending:::");
-	    return (new ResponseEntity<>(json, headers, HttpStatus.OK)) ;
-		
+
+		return "Say Hello to Employees....";
+
 	}
 
-	 
-	
+	/**
+	 * @param employeePayload
+	 * @return
+	 */
+	@PostMapping(value = "employees", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Map<String, Object>> createNewEmployee(@Valid @RequestBody EmployeePayload employeePayload) {
+
+		slf4jLogger.info("EmployeeController-Create New Employee starting:::");
+		long startTime = System.currentTimeMillis();
+
+		String status = employeeService.createNewEmployee(employeePayload);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json; charset=UTF-8");
+		headers.add("TIme-Taken", String.valueOf(System.currentTimeMillis() - startTime) + " ms");
+		Map<String, Object> json = new HashMap<String, Object>();
+		json.put("status", status);
+		slf4jLogger.info("EmployeeController-Create New Employee ending:::");
+		return (new ResponseEntity<>(json, headers, HttpStatus.CREATED));
+
+	}
+
+	/**
+	 * 
+	 * @param employeePayload
+	 * @param id
+	 * @return
+	 */
+	@PutMapping(value = "employees/{id}", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Map<String, Object>> updateEmployeeById(@Valid @RequestBody EmployeePayload employeePayload,
+			@PathVariable Long id) {
+
+		slf4jLogger.info("EmployeeController-Update Employee starting:::");
+		long startTime = System.currentTimeMillis();
+		String status = employeeService.updateEmployeeById(employeePayload, id);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json; charset=UTF-8");
+		headers.add("TIme-Taken", String.valueOf(System.currentTimeMillis() - startTime) + " ms");
+		Map<String, Object> json = new HashMap<String, Object>();
+		json.put("status", status);
+		slf4jLogger.info("EmployeeController-Update Employee ending:::");
+		return (new ResponseEntity<>(json, headers, HttpStatus.OK));
+
+	}
+
 }
