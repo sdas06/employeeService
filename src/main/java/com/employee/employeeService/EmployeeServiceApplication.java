@@ -11,7 +11,6 @@ import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerF
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import com.employee.employeeService.controller.EmployeeController;
 import com.employee.employeeService.dao.EmpRepository;
 import com.employee.employeeService.entity.Employee;
 
@@ -22,10 +21,16 @@ import com.employee.employeeService.entity.Employee;
 @SpringBootApplication
 public class EmployeeServiceApplication {
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(EmployeeServiceApplication.class, args);
 	}
 
+	/**
+	 * @return
+	 */
 	@Bean
 	public WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> webServerFactoryCustomizer() {
 		return factory -> factory.setContextPath("/employeeService");
